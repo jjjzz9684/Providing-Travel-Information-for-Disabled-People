@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inform</title>
+    <style>
+        html,
+        body {height: 100%;margin: 0;padding: 0;font-family:'나눔고딕';text-align: center;}
+        #top {margin: 0%;padding: 3%;background-color: #70A4CE;}
+        #mom{margin-top: 50px; margin-left: 25%; margin-right: 25%;}
+        #map{height: 400px;width: 700px;margin-bottom: 70px;}
+        #pyo{margin-top: 70px;margin-bottom: 70px; border:1px solid #000000;}
+        a { text-decoration: none; color: black; }
+        a:visited { text-decoration: none; }
+        a:hover { text-decoration: none; }
+        a:focus { text-decoration: none; }
+        a:hover, a:active { text-decoration: none; }
+    </style>
+</head>
+<body>
+<h1 id="top"><a href="index.html">TourGather-여행정보제공 서비스</a></h1>
+<div id="mom">
+    <h1 id="title"></h1>
+    <img src="http://cfile22.uf.tistory.com/image/2105D93B58DB4D34326533" id="img">
+    <h3 id="addr"></h3>
+    <h5 id="tel"></h5>
+
+    <table id="pyo">
+        <tr>
+            <th>분류</th>
+            <th>제공 정보</th>
+        </tr>
+    </table>
+    <div id="map"></div>
+
+</div>
+<script>
+    //접속정보
+    var temp = location.href.split(":");
+    var split = temp[1].split("/");
+    var ip = split[2];
+    //넘겨받은 URI정보 처리
+    var temp = location.href.split("?");
+    var dealing = temp[1].split("&");
+    var data = [];  //id 0, img 1 , title 2, addr1 3, x 4 , y 5, tel 6
+    for (x in dealing) {
+        var temp = dealing[x].split("=");
+        data[x] = temp[1];
+        if (x == 2 || x==3) {
+            data[x] = decodeURIComponent(data[x]);
+        }
+        console.log(data[x]);
+    }
+
+    var title = document.getElementById("title");
+    title.innerHTML = data[2];
+    if (data[1] != "null") {
+        var img = document.getElementById("img");
+        img.setAttribute('src', data[1])
+    }
+    var addr = document.getElementById("addr");
+    addr.innerHTML = data[3];
+    if (data[6] != "null") {
+        var tel = document.getElementById("tel");
+        tel.innerHTML = data[6];
+    }
+    setTable(data[0]);  //제공정보 테이블
+
+    function createTable(d) {
+        var tbl = document.getElementById("pyo");
+       //tbl.setAttribute('border', '1px solid #000000');
+
+
+///////////////////////////////////////////////////////////////
+       var tbd = document.createElement('tbody');
+        if (d.brailblock != null) {
+            var tr = document.createElement('tr');
+            var td1 = document.createElement('td');
+            var td2 = document.createElement('td');
+
+            var img1 = document.createElement("img");
+            img1.setAttribute('src', '../img/braiilblock.png');
+            td1.appendChild(img1);
+            tr.appendChild(td1);
+            td2.innerHTML = d.brailblock;
+            tr.appendChild(td2);
+            tbd.appendChild(tr);
+        }
+        if (d.elevator != null) {
+            var tr = document.createElement('tr');
+            var td1 = document.createElement('td');
+            var td2 = document.createElement('td');
+
+            var img1 = document.createElement("img");
+            img1.setAttribute('src', '/img/elevator2.jpg');
+            img1.style.width='40px';
+            img1.style.height='40px';
+            td1.appendChild(img1);
+            tr.appendChild(td1);
+
+            td2.innerHTML = d.elevator;
+            tr.appendChild(td2);
+            tbd.appendChild(tr);
+        }
+        if (d.exit != null) {
+            var tr = document.createElement('tr');
+            var td1 = document.createElement('td');
+            var td2 = document.createElement('td');
+
+            var img1 = document.createElement("img");
+            img1.setAttribute('src', '/img/exit.png');
+            img1.style.width='40px';
+            img1.style.height='40px';
+            td1.appendChild(img1);
+            tr.appendChild(td1);
+
+            td2.innerHTML = d.exit;
+            tr.appendChild(td2);
+            tbd.appendChild(tr);
+        }
+        if (d.helpdog != null) {
+            var tr = document.createElement('tr');
+            var td1 = document.createElement('td');
+            var td2 = document.createElement('td');
+
+            var img1 = document.createElement("img");
+            img1.setAttribute('src', '/img/helpdog.png');
+            img1.style.width='40px';
+            img1.style.height='40px';
+            td1.appendChild(img1);
+            tr.appendChild(td1);
+
+            td2.innerHTML = d.helpdog;
+            tr.appendChild(td2);
+            tbd.appendChild(tr);
+        }
+        if (d.parking != null) {
+            var tr = document.createElement('tr');
+            var td1 = document.createElement('td');
+            var td2 = document.createElement('td');
+
+            var img1 = document.createElement("img");
+            img1.setAttribute('src', '/img/parking2.png');
+            img1.style.width='40px';
+            img1.style.height='40px';
+            td1.appendChild(img1);
+            tr.appendChild(td1);
+
+            td2.innerHTML = d.parking;
+            tr.appendChild(td2);
+            tbd.appendChild(tr);
+        }
+        if (d.publictransport != null) {
+            var tr = document.createElement('tr');
+            var td1 = document.createElement('td');
+            var td2 = document.createElement('td');
+
+            var img1 = document.createElement("img");
+            img1.setAttribute('src', '/img/publictransport.png');
+            img1.style.width='40px';
+            img1.style.height='40px';
+            td1.appendChild(img1);
+            tr.appendChild(td1);
+
+            td2.innerHTML = d.publictransport;
+            tr.appendChild(td2);
+            tbd.appendChild(tr);
+        }
+        if (d.restroom != null) {
+            var tr = document.createElement('tr');
+            var td1 = document.createElement('td');
+            var td2 = document.createElement('td');
+
+            var img1 = document.createElement("img");
+            img1.setAttribute('src', '/img/restroom.png');
+            img1.style.width='40px';
+            img1.style.height='40px';
+            td1.appendChild(img1);
+            tr.appendChild(td1);
+
+            td2.innerHTML = d.restroom;
+            tr.appendChild(td2);
+            tbd.appendChild(tr);
+        }
+        if (d.wheelchair != null) {
+            var tr = document.createElement('tr');
+            var td1 = document.createElement('td');
+            var td2 = document.createElement('td');
+
+            var img1 = document.createElement("img");
+            img1.setAttribute('src', '/img/wheelchair.png');
+            img1.style.width='40px';
+            img1.style.height='40px';
+            td1.appendChild(img1);
+            tr.appendChild(td1);
+
+            td2.innerHTML = d.wheelchair;
+            tr.appendChild(td2);
+            tbd.appendChild(tr);
+        }
+
+        console.log(tbd.rows.length);
+        if(tbd.rows.length == 0) {
+            var tr = document.createElement('tr');
+            var td1 = document.createElement('td');
+            var td2 = document.createElement('td');
+            td1.innerHTML =  "";
+            tr.appendChild(td1);
+            td2.innerHTML = "제공되는 정보가 없습니다.";
+            tr.appendChild(td2);
+            tbd.appendChild(tr);
+        }
+        ///////////////////////////////////////////
+        tbl.appendChild(tbd);
+    }
+
+    function setTable(id) {
+        var d = [];
+
+        var xmlhttp  = new XMLHttpRequest();
+        ///////////url요청
+        var url = 'http://'+ip+':8080/detailedService';
+        url = url + "?id=" + id;
+        xmlhttp.open('GET', url);
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var myArr = JSON.parse(this.responseText);
+                console.log(myArr);
+                createTable(myArr);
+
+
+            }
+        };
+        xmlhttp.setRequestHeader( 'Content-Type', 'application/json' );
+        xmlhttp.send();
+    }
+
+
+    //지도
+    function initMap() {
+        var dest =  { lat: parseFloat(data[5]), lng: parseFloat(data[4]) };
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 16,
+            center: dest
+        });
+        var marker = new google.maps.Marker({
+            position: dest,
+            map: map,
+            draggable:true
+        });
+    }
+
+
+
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVqLIifouh_Q_gf2b7gdGEeYSAL4ObbC0&callback=initMap">
+</script>
+</body>
+</html>

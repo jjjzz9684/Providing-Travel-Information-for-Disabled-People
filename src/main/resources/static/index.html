@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>index</title>
+  <meta charset="utf-8">
+  <style>
+    html,
+    body {margin: 0  ;padding: 0;font-family:'나눔고딕'; text-align: center;}
+    #top {margin: 0%;padding: 3%;background-color:#70A4CE;}
+    #listbox{margin-top:3%;}
+    #mom {margin-left: 25%;margin-right: 25%;}
+    a { text-decoration: none; color: black; }
+    a:visited { text-decoration: none; }
+    a:hover { text-decoration: none; }
+    a:focus { text-decoration: none; }
+    a:hover, a:active { text-decoration: none; }
+  </style>
+</head>
+
+<body>
+  <h1 id="top"><a href="index.html" >TourGather-여행정보제공 서비스</a></h1>
+<div id="mom">
+  <select class="selectTest" id="listbox" onchange="secondChange(this)">
+    <option selected>지역선택</option>
+    <option value="1">서울</option>
+    <option value="2">인천</option>
+    <option value="3">대전</option>
+    <option value="4">대구</option>
+    <option value="5">광주</option>
+    <option value="6">부산</option>
+    <option value="7">울산</option>
+    <option value="8">세종특별자치시</option>
+    <option value="31">경기도</option>
+    <option value="32">강원도</option>
+    <option value="33">충청북도</option>
+    <option value="34">충청남도</option>
+    <option value="35">경상북도</option>
+    <option value="36">경상남도</option>
+    <option value="37">전라북도</option>
+    <option value="38">전라남도</option>
+    <option value="39">제주도</option>
+  </select>
+
+  <select id="second">
+    <option selected>지역구 선택</option>
+  </select>
+
+  <button onclick=search()>검색</button>
+
+    <div id="container"></div>
+
+  <script>
+      var temp = location.href.split(":");
+      var split = temp[1].split("/");
+      var ip = split[2];
+
+
+
+      function search() {
+
+
+    var list1=document.getElementById("listbox");
+    var indexNo = list1.options[list1.selectedIndex].value;
+    var list2=document.getElementById("second");
+    var indexNo2 = list2.options[list2.selectedIndex].value;
+    console.log("selected: %d %d", indexNo, indexNo2);
+
+
+      var xmlhttp  = new XMLHttpRequest();
+      var url = 'http://'+ip+':8080/areaBasedSearch';
+      url=url+"?code1="+indexNo+"&code2="+indexNo2;
+      xmlhttp.open('GET', url);
+      var d;
+
+      var parent = document.getElementById("container");
+      parent.classList.remove("createdDiv");
+    var x = document.getElementsByClassName("createdDiv");
+
+    for (var i = x.length-1 ; i>=0; i--) {
+        x[i].remove();
+    }
+
+
+      xmlhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+              var myArr = JSON.parse(this.responseText);
+              console.log(myArr);
+              d = myArr;
+              console.log(d.items[0].addr1);
+              for (x in d.items) {
+                  console.log(x);
+                  addDiv(d.items[x]);
+              }
+          }
+      };
+      xmlhttp.setRequestHeader('Content-Type', 'application/json' );
+      xmlhttp.send();
+
+
+  }
+
+/*새로운 축제정보를 추가하는 함수*/
+  function addDiv(d) {
+
+      var objTo = document.getElementById('container');
+    //append link
+      var a = document.createElement("a");
+      a.href = "inform.html?id="+d.contentId+"&img="+d.img1+ "&name=" + encodeURIComponent(d.title) + "&addr=" + d.addr1 + "&mapx=" + d.mapX + "&mapy=" + d.mapY
+                +"&tel="+d.tel;
+      objTo.appendChild(a);
+
+      var div = document.createElement("div");
+      div.className = "createdDiv"
+     a.appendChild(div);
+
+      //행사이름
+      var title = document.createElement("h3");
+      title.innerHTML = d.title;
+      div.appendChild(title);
+
+      //이미지
+      var img1 = document.createElement("img");
+      if(d.img1 == null) {
+          d.img1 = 'https://soco.seoul.go.kr/images/contents/no_img_han2.png';
+      }
+      img1.setAttribute('src', d.img1);
+
+      div.appendChild(img1);
+
+
+     var addr1 = document.createElement("h5");
+     addr1.innerHTML = d.addr1;
+      if(d.addr2 != null) {
+          addr1.innerHTML += " "+d.addr2;
+      }
+      div.appendChild(addr1);
+      div.style.marginTop = "50px";
+      div.style.marginBottom = "100px";
+
+      div.setAttribute('border', '1px solid #000000');
+      var line = document.createElement("hr");
+      div.appendChild(line);
+  }
+
+  function secondChange(e) {
+      var d = [];
+    var num = [];
+    var xmlhttp  = new XMLHttpRequest();
+    ///////////url요청
+    var url = 'http://'+ip+':8080/area';
+    url = url + "?id=" + e.value;
+    xmlhttp.open('GET', url);
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var myArr = JSON.parse(this.responseText);
+            console.log(myArr);
+            d = myArr.content;
+            num = myArr.id;
+            console.log(d);
+            console.log(num);
+            var target = document.getElementById("second");
+
+            target.options.length = 1;
+            ////선택지 추가
+            //cnt=1;
+            for (x in d) {
+                var opt = document.createElement("option");
+                opt.value = num[x];
+                opt.innerHTML = d[x];
+                target.appendChild(opt);
+            }
+        }
+    };
+    xmlhttp.setRequestHeader( 'Content-Type', 'application/json' );
+    xmlhttp.send();
+  }
+
+  </script>
+
+  <!--내용 늘리기 해야함-->
+</div>
+</body>
+</html>
